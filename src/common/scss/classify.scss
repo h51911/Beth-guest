@@ -1,0 +1,100 @@
+//  头部和导航样式
+.title {
+
+    width: 100%;
+    height: 1.351852rem;
+    text-align: center;
+    font-size: .481481rem;
+    line-height: 1.351852rem;
+    border-bottom: .009259rem solid #cccccc;
+}
+
+.deheader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #fff;
+}
+
+.sort_list {
+    // margin-top: 1.351852rem;
+    margin-left: .277778rem;
+    border-bottom: .009259rem solid #cccccc;
+
+    .goodlist {
+
+        font-size: .462963rem;
+        line-height: 1.666667rem;
+        margin-right: .555556rem;
+    }
+
+    .active {
+        font-weight: bold;
+        border-bottom: .027778rem solid #1fb1b8;
+        color: black;
+    }
+}
+
+
+//商品列表
+
+.classCon {
+    margin-top: 3.037037rem;
+    margin-bottom: 1.388889rem;
+
+    ul {
+        border-top: .009259rem solid #cccccc;
+        border-bottom: .009259rem solid #cccccc;
+        font-size: .37037rem;
+
+        h4 {
+            margin-bottom: 1.037037rem;
+            font-size: .425926rem;
+            font-weight: bold;
+        }
+
+        .goods {
+            width: 4.981481rem;
+            height: 7.166667rem;
+            padding: .333333rem;
+            border-bottom: .009259rem solid #cccccc;
+
+            img {
+                margin-bottom: .740741rem;
+                width: 3.62963rem;
+                //   height: 100%;
+                //   width: 100%;
+            }
+
+            .price {
+                color: #ff3300;
+            }
+
+            .ge {
+                color: #bcbcbc;
+            }
+
+            .icon {
+                color: #1fb1b8;
+                font-size: .555556rem;
+            }
+        }
+    }
+
+    ul .goods:nth-child(2n) {
+        border-left: .009259rem solid #cccccc;
+    }
+
+    ul .goods:nth-last-child(1) {
+        border-right: .009259rem solid #cccccc;
+        border-bottom: 0;
+    }
+}
+
+.goodchoce {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 3;
+}

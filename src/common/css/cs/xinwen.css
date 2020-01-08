@@ -1,0 +1,22 @@
+.xinwen{
+    width: 100%;
+    height: 1.6rem;
+}
+.tongzhi{
+    padding-top: 14px;
+    height: 1.333333rem;
+    overflow: hidden;
+      
+}
+.tongzhi p{
+    width: 310px;
+    float: left;
+    overflow: hidden;
+    height: 0.933333rem;
+    font-size: 0.373333rem;
+    line-height: 0.933333rem;
+    color: #157f83;    
+}
+.ant-btn-primary {
+    float: left;
+}

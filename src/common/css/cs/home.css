@@ -1,0 +1,38 @@
+.home{
+    width: 100%;
+    height:100% ;
+    margin-bottom: 52px;
+}
+.head{
+    width: 100%;
+    height:1.306667rem ;
+}
+.head-left {
+    height: 1.306667rem;
+    font-size: 0.426667rem;
+    width: 2.293333rem;
+    float: left;
+}
+.head-left a{
+    color: #222222;
+    line-height:1.306667rem;
+    padding-left: 19px;
+}
+.head-left span{
+    padding-left: 5px;
+}
+
+.box-search{
+    float: left;
+    line-height:1.306667rem;
+}
+
+.head-right{
+    height:1.306667rem ;
+    font-size:20px;
+    line-height:1.306667rem;
+    width: 1.333333rem;
+    float: left;
+    padding-left: 25px;
+}
+

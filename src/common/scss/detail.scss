@@ -1,0 +1,132 @@
+html {
+    overflow-y: scroll;
+}
+
+:root {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+:root body {
+    position: absolute;
+}
+
+body {
+    width: 100vw;
+    overflow: hidden;
+}
+
+.header {
+    font-size: .462963rem;
+    height: 1.296296rem;
+
+    .detailTitle {
+        text-align: center;
+        line-height: 1.296296rem;
+        font-weight: bold;
+        border-bottom: .009259rem solid #cccccc;
+    }
+}
+
+.iconlet {
+    display: block;
+    line-height: .518519rem;
+    margin-top: .333333rem;
+    margin-left: .305556rem;
+
+
+}
+
+.img {
+    text-align: center;
+    height: 8.240741rem;
+    line-height: 8.240741rem;
+    border-bottom: .009259rem solid #cccccc;
+
+}
+
+.detailCon {
+    padding-left: .333333rem;
+
+    h2 {
+        font-size: .481481rem;
+        color: #292929;
+        line-height: 2.407407rem;
+    }
+
+    .deprice {
+        font-size: .537037rem;
+        color: #ff3300;
+
+        i {
+            font-size: .37037rem;
+        }
+
+        .tame {
+            color: #aaaaaa;
+        }
+    }
+
+    .class {
+        font-size: .37037rem;
+        line-height: 1.240741rem;
+        margin-bottom: .314815rem;
+    }
+
+    .tiandu {
+        margin-top: .37037rem;
+        line-height: 1.166667rem;
+        font-size: .314815rem;
+    }
+}
+
+.defooter {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background-color: #fff;
+    width: 100%;
+    height: 1.37037rem;
+    line-height: 1.37037rem;
+    border-top: .018519rem solid #cccccc;
+    z-index: 3;
+
+    .decart {
+        font-size: .740741rem;
+        color: #81cfd3;
+        margin-left: .462963rem;
+    }
+
+    .gocar,
+    .gobuy {
+        width: 3.222222rem;
+        text-align: center;
+    }
+
+    .gobuy {
+        background-color: #81cfd3;
+
+    }
+}
+
+.sele {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 4;
+}
+
+.yuans {
+    height: .462963rem;
+    width: .462963rem;
+    border-radius: 50%;
+    color: #fff;
+    background-color: #ff0000;
+    font-size: .259259rem;
+    line-height: .462963rem;
+    text-align: center;
+    position: fixed;
+    left: .944444rem;
+    bottom: .833333rem;
+}
