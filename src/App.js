@@ -1,25 +1,29 @@
 
-import React, { Component } from 'react';
+import React, { Component, lazy, Suspense } from 'react';
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
 import { Icon } from 'antd';
 import { cart } from './api'
 
-import Home from './pages/Home';
-import Classify from './pages/classify';
-import Cart from './pages/Cart';
-import Mine from './pages/Mine';
-import Detail from './pages/Detail';
-import Suosuo from './pages/sousuo';
-
-
 import './common/scss/base.css';
 import './common/scss/app.scss';
-import 'antd/dist/antd.css';
-
 import { connect } from 'react-redux';
-// import store from './store';
-
 import { addgood } from './store/actions/cart';
+
+
+const Home = lazy(() => import("./pages/Home"));
+const Classify = lazy(() => import("./pages/Classify"));
+const Cart = lazy(() => import("./pages/Cart"));
+const Mine = lazy(() => import("./pages/Mine"));
+const Detail = lazy(() => import("./pages/Detail"));
+const Suosuo = lazy(() => import("./pages/sousuo"));
+const Rag = lazy(() => import("./pages/Rag"));
+const Login = lazy(() => import("./pages/Login"));
+const Forpass = lazy(() => import("./pages/Forpass"));
+const Information = lazy(() => import("./pages/Information"));
+const Enterpass = lazy(() => import("./pages/Enterpass"));
+const Nick = lazy(() => import("./pages/Nickname "));
+
+
 
 class App extends Component {
     constructor(props) {
@@ -56,19 +60,13 @@ class App extends Component {
             }
             ]
         }
-        this.changeMenu = this.changeMenu.bind(this);
         this.goto = this.goto.bind(this);
     }
 
-    changeMenu(current) {
-        let { key } = current;
-        console.log(key);
 
-    }
     async componentDidMount() {
-        // console.log(this.props);
         let { history } = this.props;
-        let list = this.state.menu.map((item, index) => {
+        let list = this.state.menu.map((item) => {
             if (item.path === history.location.pathname) {
                 item.isActive = true
             }
@@ -79,12 +77,14 @@ class App extends Component {
         })
 
         //查询相对应的id大的数据，存入store中
-        let uid = 123
-        let data = await cart.gets({
-            uid
-        });
-        // console.log(data)
-        this.props.dispatch(addgood(data.data))
+        let uid = sessionStorage.getItem('phone');
+        if (uid) {
+            let data = await cart.gets({
+                uid
+            });
+            this.props.dispatch(addgood(data.data))
+        }
+
     }
     componentDidUpdate(prevProps, nextProps) {
         if (this.props.location.pathname !== prevProps.location.pathname) {
@@ -115,54 +115,73 @@ class App extends Component {
 
     render() {
         let { menu } = this.state;
-        // console.log(this.props);
-        let { cartlist } = this.props;
-        // console.log(cartlist)
+        let { cartlist, location } = this.props;
+        let { pathname } = location
         return (
             <div className="App">
-
-                <div className="nav">
-                    <ul className="navlist "
-                    >
-                        {
-                            menu.map((item, index) => {
-                                return <li
-                                    className="list"
-                                    key={item.path}
-                                    onClick={this.goto.bind(this, item.path, index)}
-                                    style={item.isActive ? { color: '#63c6cb' } : {}}
-                                >
-
-                                    <span className="icon">
-                                        <Icon type={item.icon} />
-                                    </span>
-
-                                    {item.text}</li>
-                            })
-
-                        }
-
-                    </ul>
-                </div>
                 {
-                    cartlist.length ? <div className="yuan">
-                        {
-                            cartlist.length
-                        }
-                    </div> : ''
+                    pathname === '/rag' ||
+                        pathname === '/login' ||
+                        pathname === '/rag' ||
+                        pathname === '/forpass' ||
+                        pathname === '/enterpass' ||
+                        pathname === '/informat' ||
+                        pathname === '/nick'
+                        ?
+                        '' :
+                        <div>
+                            <div className="navBoos">
+                                <ul className="navlistoos "
+                                >
+                                    {
+                                        menu.map((item, index) => {
+                                            return <li
+                                                className="listboos"
+                                                key={item.path}
+                                                onClick={this.goto.bind(this, item.path, index)}
+                                                style={item.isActive ? { color: '#63c6cb' } : {}}
+                                            >
+
+                                                <span className="icon">
+                                                    <Icon type={item.icon} />
+                                                </span>
+
+                                                {item.text}</li>
+                                        })
+
+                                    }
+
+                                </ul>
+                            </div>
+                            {
+                                cartlist.length ? <div className="yuan">
+                                    {
+                                        cartlist.length
+                                    }
+                                </div> : ''
+                            }
+                        </div>
+
                 }
-
-
+                <Suspense fallback={<div>loading...</div>}>
                 <Switch>
-                    <Route path='/home' component={Home} />
-                    <Route path='/classify' component={Classify} />
-                    <Route path='/cart' component={Cart} />
-                    <Route path='/mine' component={Mine} />
-                    <Route path='/sousuo' component={Suosuo} />
-                    <Route path='/detail/:gid' component={Detail} />
-                    <Redirect from="/" to="/home" exact />
+                        <Route path='/home' component={Home} />
+                        <Route path='/classify' component={Classify} />
+                        <Route path='/cart' component={Cart} />
+                        <Route path='/mine' component={Mine} />
+                        <Route path='/sousuo' component={Suosuo} />
+                        <Route path='/detail/:gid' component={Detail} />
+                        <Route path='/rag' component={Rag} />
+                        <Route path='/login' component={Login} />
+                        <Route path='/forpass' component={Forpass} />
+                        <Route path='/enterpass' component={Enterpass} />
+                        <Route path='/informat' component={Information} />
+                        <Route path='/nick' component={Nick} />
+                        <Redirect from="/" to="/home" exact />
 
-                </Switch>
+                    </Switch>
+                </Suspense>
+
             </div >
         );
 
@@ -173,7 +192,9 @@ const mapStateToProps = function (state) {
     // console.log('state:', state)
     // 需要传递什么数据到组件的props就返回什么
     return {
-        cartlist: state.cart.cartlist
+        cartlist: state.cart.cartlist,
+        phone: state.user.phone,
+        userphone: state.user.userphone
     }
 }
 const mapDispatchToProps = dispatch => ({
@@ -181,6 +202,4 @@ const mapDispatchToProps = dispatch => ({
 })
 // 函数柯里化
 App = connect(mapStateToProps, mapDispatchToProps)(App);//
-// Goods = connect(mapStateToProps, mapDispatchToProps)(Goods);
-
 export default withRouter(App);

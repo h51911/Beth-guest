@@ -129,6 +129,10 @@ main {
 
 .cart-pro-number a {
     font-weight: bolder;
+
+}   
+.cart-pro-number a i {
+    font-size: 12px;
 }
 
 .cart-pro-number a,
@@ -142,28 +146,22 @@ main {
     text-align: center;
     border: 1px solid #cccccc;
 }
-
-
-
-.cart-pro-number .action-quantity-minus img,
-.cart-pro-number .action-quantity-plus img {
+.dele {
     display: block;
-    width: 12px;
-    margin-top: 5px;
-    margin-left: 7px;
+    position: absolute;
+    top: 38px;
+    right: 0px;
+    width: 1.111111rem;
+    font-size: .111111rem;
+    text-align: center;
+    color: #fff;
+    line-height: .740741rem;
+    letter-spacing: 0.09rem;
+    background: #4ebfc5;
+    font-weight: 700;
+    border-radius: .092593rem;
+    /* box-shadow: 5px 3px #948e8e; */
 }
-
-.cart-pro-number .action-quantity-minus img,
-.cart-pro-number .action-quantity-minus-disabled img {
-    margin-top: 10px;
-}
-
-.cart-pro-number span {
-    color: #969696;
-    font-size: 12px;
-}
-
-
 
 /* 购物车 */
 .emptycart {
@@ -256,7 +254,7 @@ main {
     position: relative;
     margin-bottom: .703704rem;
     list-style: none;
-    box-shadow: 0px -1px 4px 3px #c7c0c03b;
+    box-shadow: 1px 1px 5px #33333336;
 }
 
 .recommend-list li:nth-child(even) {

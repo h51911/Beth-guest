@@ -1,16 +1,21 @@
-/* 
 html {
   overflow-y: scroll;
 }
 
 :root {
   overflow-y: auto;
-  overflow-x: hidden;
+  /* overflow-x: hidden; */
+  overflow-x: auto;
 }
 
 :root body {
   position: absolute;
-} */
+}
+
+body {
+  width: 100vw;
+  overflow: hidden;
+}
 
 body {
   margin: 0;
@@ -19,7 +24,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  width: 100%;
+  /* width: 100%; */
   /* overflow: hidden; */
 }
 

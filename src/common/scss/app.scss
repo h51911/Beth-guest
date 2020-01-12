@@ -1,22 +1,22 @@
-// html {
-//     overflow-y: scroll;
-// }
+html {
+    overflow-y: scroll;
+}
 
-// :root {
-//     overflow-y: auto;
-//     overflow-x: hidden;
-// }
+:root {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
 
-// :root body {
-//     position: absolute;
-// }
+:root body {
+    position: absolute;
+}
 
-// body {
-//     width: 100vw;
-//     overflow: hidden;
-// }
+body {
+    width: 100%;
+    overflow: hidden;
+}
 
-.nav {
+.navBoos {
     background-color: #fff;
     position: fixed;
     bottom: 0;
@@ -28,7 +28,9 @@
     z-index: 2;
     margin-bottom: .185185rem;
 
-    .navlist {
+
+    .navlistoos {
+        width: 100%;
         margin-top: .296296rem;
         text-align: center;
         display: flex;
@@ -42,11 +44,6 @@
         }
     }
 }
-
-// .navlist .list:nth-child(1){
-//    color: #63c6cb;
-// }
-
 
 .icon {
     display: block;
@@ -68,5 +65,6 @@
     text-align: center;
     position: fixed;
     right: 3.333333rem;
-    bottom: .851852rem;
+    bottom:1.111111rem;
+    z-index: 2;
 }

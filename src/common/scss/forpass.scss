@@ -1,0 +1,42 @@
+.fompass {
+    .forheader {
+        height: 1.388889rem;
+        text-align: center;
+        font-size: .555556rem;
+        background-color: #f8f8f8;
+        line-height: 1.388889rem;
+        // margin-top: .37037rem;
+
+        .spanicons {
+            float: left;
+            color: #d3b145;
+            margin-left: .277778rem;
+        }
+    }
+
+
+    .forphone {
+        padding: .925926rem .555556rem;
+
+
+        Input {
+            color: #808080;
+            border-radius: 5px;
+            -webkit-border-radius: 0.125rem;
+            -moz-border-radius: 0.125rem;
+            background-color: #f8f8f8;
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+        }
+
+    }
+
+    .nextfor {
+        padding: .925926rem .555556rem;
+
+        Button {
+            background-color: #d3b145;
+            color: #fff;
+        }
+    }
+}

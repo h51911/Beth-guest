@@ -59,40 +59,4 @@ class Home extends Component {
     }
 }
 
-
-// function Home() {
-//     return (
-//         <div className="home">
-//             <div className="head">
-//                 <div className="head-left">
-//                     <a href="###">
-//                         <Icon type="star" />
-//                         <span>上海</span>
-//                     </a>
-//                 </div>
-//                 <div className="box-search">
-//                     <Search
-//                         placeholder="请输入你需要查找的内容"
-//                         onSearch={value => console.log(value)}
-//                         style={{ width: 220 }}
-//                     />
-//                 </div>
-//                 <div className="head-right">
-//                     <p>
-//                         <Icon type="customer-service" />
-//                     </p>
-//                 </div>
-//             </div>
-//             <Lunbo />
-//             <FenLei />
-//             <XinWen />
-//             <Tu />
-//             <Sq />
-//             <Xiao />
-//             <Bing />
-//         </div>
-
-//     );
-// }
-
 export default Home;

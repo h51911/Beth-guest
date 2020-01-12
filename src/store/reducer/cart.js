@@ -3,13 +3,17 @@ export const REMOVE_FROM_CART = 'REMOVE_FROM_CART';
 export const CHANGE_QTY = 'CHANGE_QTY';
 export const CLEAR_CART = 'CLEAR_CART';
 export const ADD_TO_Good = 'ADD_TO_Good';
-
+export const ADD_SHOP = 'ADD_SHOP';  // + 商品
+export const SUB_SHOP = 'SUB_SHOP';  // — 商品
+export const TOGGLE_SHOP = 'TOGGLE_SHOP';  // 是否选中
+export const ADD_TO_Price = 'ADD_TO_Price';
 
 
 // State：初始数据
 let initState = {
     totalPrice: 0,
-    cartlist: []
+    cartlist: [],
+    newlist: []
 }
 
 // Reducer：修改state的方法（重要：在redux中修改state方式：重写并覆盖）
@@ -28,6 +32,11 @@ const reducer = function (state = initState, { type, payload }) {
             return {
                 ...state,
                 cartlist: payload
+            }
+        case ADD_TO_Price:
+            return {
+                ...state,
+                totalPrice: payload
             }
 
 
@@ -50,6 +59,21 @@ const reducer = function (state = initState, { type, payload }) {
                 })
             }
 
+
+        // case CHANGE_PRICE:
+        //     return {
+        //         ...state,
+        //         newlist: state.cartlist.map(item => {
+        //             let total = 0;
+        //             if (item.choose === true) {
+        //                 total = item.num * item.price;
+        //             }
+        //             return total;
+        //         })
+
+        //     }
+
+
         // 清空购物车
         case CLEAR_CART:
             return {
@@ -57,6 +81,45 @@ const reducer = function (state = initState, { type, payload }) {
                 cartlist: []
             }
 
+
+        case ADD_SHOP: // 商品 ++
+            return {
+                ...state,
+                cartlist: state.cartlist.map(item => {
+                    if (item.gid === payload.gid) {
+                        item.num++
+                    }
+                    return item;
+                })
+            }
+
+        case SUB_SHOP: // 商品 --
+            return {
+                ...state,
+                cartlist: state.cartlist.map(item => {
+                    if (item.gid === payload.gid) {
+                        if (item.num <= 1) {
+                            item.num = 1
+                            // 代码不继续往下执行
+                        } else {
+                            item.num--
+                        }
+
+                    }
+                    return item;
+                })
+            }
+
+        case TOGGLE_SHOP:  // 选中或取消选中商品
+            return {
+                ...state,
+                cartlist: state.cartlist.map(item => {
+                    if (item.gid === payload.gid) {
+                        item.choose = !item.choose;
+                    }
+                    return item;
+                })
+            }
         default:
             return state;
     }

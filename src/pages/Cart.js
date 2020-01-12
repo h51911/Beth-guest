@@ -1,95 +1,180 @@
 import React, { Component } from 'react';
-import { Icon } from 'antd';
+import { Checkbox, Icon, message } from 'antd';
 import '../common/css/cart.css'
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { cart } from '../api';
+import Qs from "qs";
 
+import { remove, clear, userAddShop, userSubShop, checkShopNumber, addgood } from '../store/actions/cart';
 
 class Cart extends Component {
-    state = {
-        goodslist: [{
-            goods_id: '1',
-            goods_name: 'Deep Bailey s Lovers',
-            goods_images: 'https://m.21cake.com/goods/1459337079137.jpg',
-            goods_price: 268.00,
-            goods_qty: 10
-        }, {
-            goods_id: '2',
-            goods_name: 'Deep Bailey s Lovers',
-            goods_images: 'https://m.21cake.com/upload/images/22209c54953376c0478b4ac98490f95c.jpg',
-            goods_price: 269.00,
-            goods_qty: 12
-        }]
+    constructor(props) {
+        super(props);
+        this.state = {
+            selectedAll: true,
+            liked: true,
+            cartlist: [],
+            totalPrice: 0
+
+        }
+        this.removeItem = this.removeItem.bind(this);
+        this.clearCart = this.clearCart.bind(this);
+        // this.changeQty = this.changeQty.bind(this);
+        this.addShopNum = this.addShopNum.bind(this);
+        this.subShopNum = this.subShopNum.bind(this);
+        this.selecteItem = this.selecteItem.bind(this);
+        this.changenum = this.changenum.bind(this);
+        this.remove = this.remove.bind(this)//点击删除
 
     }
 
-
-    changeQty = (id, qty) => {
-        let { goodslist } = this.state;
-        goodslist = goodslist.map(item => {
-            console.log(item)
-            if (item.goods_id === id) {
-                item.goods_qty = qty;
-            }
-            return item
-        })
+    handleClick = () => {
+        //更新状态值
         this.setState({
-            goodslist
-        })
-    }
+            liked: !this.state.liked,
 
-    //删除商品
-    removeItem = (id) => {
-        let { goodslist } = this.state;
-        goodslist = goodslist.filter(item => item.goods_id !== id);
+        })
+        this.selecALL()
+    }
+    //全选和反选
+    selecALL = () => {
+        this.setState({//全选方式、:覆盖
+            selectedAll: !this.state.selectedAll
+        })
+        let list = this.props.cartlist.map(item => {
+            item.choose = !item.choose;
+            return item;
+        })
+        this.props.dispatch(addgood(list));
+
         this.setState({
-            goodslist
+            totalPrice: 0
         })
     }
 
-    //清空购物车
-    clearCart = () => {
-        this.setState({
-            goodslist: []
-        })
+    async removeItem(gid) {
+        let { uid } = this.props.cartlist[0];
+        let str = {
+            uid,
+            gid
+        }
+        let data = await cart.post('/del', Qs.stringify(str));
+        if (data.code) {
+            this.props.dispatch(remove(gid));
+            message.success('删除成功')
+        } else {
+            message.success('删除失败')
+        }
+
+    }
+    clearCart() {
+        this.props.dispatch(clear())
     }
 
-    // //按钮数量加
-    // calcAdd=(qty)=>{
-    //     let {goodslist} = this.state;
-    //     goodslist = goodslist.goods_qty +=1;
+    async addShopNum(gid) {
+        this.props.dispatch(userAddShop(gid));
+        let { num, uid } = this.props.cartlist[0];
+        let str = {
+            uid,
+            gid,
+            num
+        }
+        await cart.post('/updataNum', Qs.stringify(str));
+    }
 
-    // 	//更新state属性值
-    // 	this.setState({
-    // 		goodslist
-    //     })
-    //     this.changeQty()
-    // }
+    async subShopNum(gid) {
+        this.props.dispatch(userSubShop(gid));
+        let { num, uid } = this.props.cartlist[0];
+        let str = {
+            uid,
+            gid,
+            num
+        }
+        await cart.post('/updataNum', Qs.stringify(str));
+    }
+
+    //取消选中、或者选中
+    selecteItem(gid) {
+        this.props.dispatch(checkShopNumber(gid));
+        let checknum = this.props.cartlist.filter(item => item.choose !== false);
+        let le1 = this.props.cartlist.length;
+        let le2 = checknum.length;
+        if (le1 === le2) {
+            this.setState({//全选方式、:覆盖
+                selectedAll: true
+            })
+
+        } else {
+            this.setState({//全选方式、:覆盖
+                selectedAll: false
+            })
+        }
 
 
+    }
+    async remove() {
+        let cartold = this.props.cartlist.filter(item => item.choose === true);
+        let order1 = [];
+        let goodstr1 = {};
+        cartold.forEach(item => {
+            goodstr1.uid = item.uid;
+            goodstr1.gid = item.gid;
+            order1.push(goodstr1);
+        });
+        // console.log(order1)
+        order1.forEach(async item1 => {
+            await cart.post('/del', Qs.stringify({ uid: item1.uid, gid: item1.gid }))
+        });
+
+        let cartnew = this.props.cartlist.filter(item => item.choose !== true);
+        this.props.dispatch(addgood(cartnew));
+
+    }
+    changenum(e) {
+        // console.log(e.target.value)
+
+    }
     render() {
-        let { goodslist } = this.state;
-        let totalPrice = goodslist.reduce((prev, item) => prev + item.goods_price * item.goods_qty, 0)
-        let totalQty = goodslist.reduce((prev, item) => prev + item.goods_qty, 0)
+        let { cartlist, totalPrice } = this.props;
+        let { selectedAll } = this.state;
         return <div>
             <div className="cart">
                 <header className="title-bar">
                     <h1 className="nav-title"> 购物车 </h1>
-                    <span className="tiele">编辑</span>
+                    {
+                        this.state.liked ? <span className="tiele" onClick={this.handleClick}>编辑</span> : <span className="tiele" onClick={this.handleClick}>完成</span>
+                    }
+
+
+
                 </header>
                 <main>
                     {/* 商品渲染 */}
                     <ul className="goods-list">
                         {
-                            goodslist.map(item => {
-                                return <li className="goods-item" key={item.goods_id}>
-                                    <span className="left psoi" onClick={this.removeItem.bind(this, item.goods_id)}> <Icon type="poweroff" /></span>
+                            cartlist.map(item => {
+                                return <li className="goods-item" key={item.gid}>
+                                    <span className="left psoi">
+                                        <Checkbox
+                                            onChange={this.selecteItem.bind(this, item.gid, item.choose)}
+                                            value={item.choose}
+                                            checked={item.choose}
+                                        ></Checkbox>
+                                    </span>
                                     <div className="cart-pro-box">
-                                        <a href="###">
-                                            <img src={item.goods_images} alt="" />
+                                        <a>
+                                            <img src={item.src} alt=""
+                                                onClick={
+                                                    () => {
+                                                        this.props.history.push('/detail/' + item.gid)
+                                                    }}
+                                            />
                                         </a>
                                         <div className="cart-pro-title">
                                             <div>
                                                 <h2>
-                                                    <span>{item.goods_name}</span>
+                                                    <span>{item.title}</span>
                                                     <p className="txt">物流</p>
                                                 </h2>
                                             </div>
@@ -97,24 +182,23 @@ class Cart extends Component {
                                                 454g(1.0磅)
                                                         <i></i>
                                             </span>
-                                            <span className="cart-price" data-amount="268">￥{item.goods_price}<strong>/个</strong> </span>
+                                            <span className="cart-price" data-amount="268">￥{item.price}<strong>/个</strong> </span>
                                         </div>
                                     </div>
                                     <div className="cart-pro-number">
-                                        <a className="action-quantity-minus" href="###">
-                                            <img onClick={this.changeQty.bind(this, item.goods_qty)} src="https://static.21cake.com//themes/wap/img/-.png" alt="" />
+                                        <a className="action-quantity-minus" onClick={this.subShopNum.bind(this, item.gid)}>
+                                            <Icon type="minus" />
                                         </a>
                                         <input
-                                            min={1}
-                                            max={10}
-                                            value={item.goods_qty}
-                                            onChange={this.changeQty.bind(this, item.goods_id)}
-                                        // onChange={changeQtyAsync.bind(this,item.goods_id)}
+                                            type="num"
+                                            value={item.num}
+                                            onChange={this.changenum.bind(this)}
                                         />
-                                        <a className="action-quantity-plus" href="###">
-                                            <img onClick={this.changeQty.bind(this, item.goods_qty)} src="https://static.21cake.com/themes/wap/img/+.png" alt="+" />
+                                        <a className="action-quantity-plus" onClick={this.addShopNum.bind(this, item.gid)}>
+                                            <Icon type="plus" />
                                         </a>
                                     </div>
+                                    <span className="dele" onClick={this.removeItem.bind(this, item.gid)}>删除</span>
                                 </li>
                             })
                         }
@@ -168,18 +252,58 @@ class Cart extends Component {
                 </main>
                 {/* <!-- 下单按钮 --> */}
                 {/* style={{display:'none'}} */}
-                <footer className="footer">
-                    <div className="nen">
-                        <span className="left" onClick={this.clearCart}> <Icon type="poweroff" /><em>全选</em></span>
-                        <span className="footer-left"><em>合计</em>:<em className="total">{totalPrice.toFixed(2)}</em></span>
+                <footer className="footer clearfix">
+                    <div className="nen fl" >
+                        <span className="left">
+                            {/* onClick={clearCart} */}
+                            <Checkbox
+                                onChange={this.selecALL}
+                                checked={this.state.selectedAll}
+                                defaultValue=""
+                            ></Checkbox>
+                            <em>全选</em></span>
+                        {
+                            this.state.liked ? <span className="footer-left"><em>合计:</em>
+                                {
+                                    selectedAll ? <em className="total">
+                                        {totalPrice}
+                                    </em> : <em className="total">
+                                            0
+                                        </em>
+                                }
+                            </span> : ''
+                        }
+
+
                     </div>
-                    <button className="footer-right" type="button" id="jieSuan">去结算
-                            <em className="total-num">{totalQty}</em>
-                    </button>
+                    <div className="fr">
+                        {
+                            this.state.liked ? <button className="footer-right" type="button" id="jieSuan">去结算
+                             <em className="total-num">{cartlist.length}</em>
+                            </button> : <button className="footer-right" type="button" id="jieSuan" onClick={this.remove.bind(this)}>删除
+                        </button>
+                        }
+
+
+                    </div>
+
                 </footer>
             </div>
         </div>
     }
 }
 
-export default Cart;
+
+const mapStateToProps = state => {
+    return {
+        cartlist: state.cart.cartlist,
+        totalPrice: state.cart.cartlist.reduce((prev, item) => prev + item.price * item.num, 0),
+        totalQty: state.cart.cartlist.reduce((prev, item) => prev + item.num * 1, 0)
+    }
+}
+const mapDispatchToProps = dispatch => ({
+    dispatch
+})
+// // 函数柯里化
+Cart = connect(mapStateToProps, mapDispatchToProps)(Cart);
+export default withRouter(Cart);

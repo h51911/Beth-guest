@@ -1,20 +1,38 @@
+export const Login = 'Login';
+export const Logout = 'Logout';
+export const Rag = 'Rag';
+export const CunToken = 'CunToken';
+
+
 
 let initState = {
-    user:{}
+    phone: '',
+    userphone: '',
+    token: ''
 }
 
-const reducer = function(state=initState,{type,payload}){
-    switch(type){
+const reducer = function (state = initState, { type, payload }) {
+    switch (type) {
         // {type:'login',payload:userInfo}
-        case 'login':
+        case 'Login':
             return {
                 ...state,
-                user:payload
+                userphone: payload
             }
-        case 'logout':
+        case 'CunToken':
             return {
                 ...state,
-                user:{}
+                token: payload
+            }
+        case 'Logout':
+            return {
+                ...state,
+                phone: ''
+            }
+        case 'Rag':
+            return {
+                ...state,
+                phone: payload
             }
         default:
             return state;

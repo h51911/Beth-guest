@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Icon, Alert } from 'antd';
+import { Icon, message } from 'antd';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import '../common/scss/select.scss';
@@ -7,25 +7,25 @@ import Qs from "qs";
 import { cart } from '../api';
 import 'axios';
 import { connect } from 'react-redux';
-import { changeQty } from '../store/actions/cart';
+import { changeQty, add2cart } from '../store/actions/cart';
 class Select extends Component {
     constructor(props) {
         super(props);
         this.state = {
             num: 1,
             msg: {},
-            uid: 123,
+            uid: '',
             // 提示
             success: false,
             fail: false,
-            deposit: false
+            deposit: false,
+
         }
-        this.tishisucc = this.tishisucc.bind(this);
-        this.tishifail = this.tishifail.bind(this);
         this.close = this.close.bind(this);
-        // this.buygoods = this.buygoods.bind(this);
         this.cut = this.cut.bind(this);
         this.add = this.add.bind(this);
+        this.goubuynow = this.goubuynow.bind(this);
+
 
     }
 
@@ -34,28 +34,8 @@ class Select extends Component {
         this.props.choice(false);
 
     }
-    tishisucc(str) {
-        let strnew = null;
-        if (this.state.success === str) {
-            strnew = true;
-        } else {
-            strnew = false;
-        }
-        this.setState({
-            success: strnew
-        })
-    }
-    tishifail(str) {
-        let strnew = null;
-        if (this.state.fail === str) {
-            strnew = true;
-        } else {
-            strnew = false;
-        }
-        this.setState({
-            fail: strnew
-        })
-    }
+
+
     // 数量减
     cut() {
         let num = this.state.num;
@@ -82,33 +62,33 @@ class Select extends Component {
 
     }
 
-    gocart = async (gid, str) => {
+    async  goubuynow(gid) {
         let { cartlist, dispatch } = this.props;
         let has = cartlist.filter(item => item.gid === gid);
-
         if (has.length) {
+            // console.log('has', has.length)
             let num = this.state.num + has[0].num * 1;
             let uid = has[0].uid;
+            // console.log(num)
             dispatch(changeQty(gid, num));
             let newstr = {
                 uid,
                 num,
                 gid
             }
-            let data = await cart.post("/updata", Qs.stringify(newstr));
+            let data = await cart.post('/updataNum', Qs.stringify(newstr));
+
             if (data.code) {
-                console.log("添加成功");
-                this.tishisucc(false);
-                // this.props.choice(false);
+                message.success('添加成功');
             } else {
-                console.log("添加失败");
+                message.error('添加失败');
             }
-            // setTimeout(this.tishisucc(true), 2000)
+
         } else {
-            console.log(66)
             let { goodData } = this.props;
-            let str = {
-                uid: this.state.uid,
+            let uid = sessionStorage.getItem('phone')
+            let str1 = {
+                uid,
                 gid: goodData.gid,
                 src: goodData.src,
                 title: goodData.title,
@@ -116,93 +96,36 @@ class Select extends Component {
                 num: this.state.num,
                 choose: true
             }
-            let data = await cart.post("/insert", Qs.stringify(str));
+            dispatch(add2cart(str1));
+            let data = await cart.post("/insert", Qs.stringify(str1));
             if (data.code) {
-                console.log("添加成功");
-                this.props.choice(false);
+                message.success('添加成功');
             } else {
-                console.log("添加失败")
-                this.props.choice(false);
+                message.error('添加失败');
             }
 
-
         }
-
-        this.tishisucc(true);
-
     }
-
-
-
-    buyNow = async (gid, str) => {
-        let { cartlist, dispatch } = this.props;
-        let has = cartlist.filter(item => item.gid === gid);
-
-        if (has.length) {
-            let num = this.state.num + has[0].num * 1;
-            let uid = has[0].uid;
-            dispatch(changeQty(gid, num));
-            let newstr = {
-                uid,
-                num,
-                gid
-            }
-            let data = await cart.post("/updata", Qs.stringify(newstr));
-            if (data.code) {
-                console.log("添加成功");
-                this.props.choice(false);
-            } else {
-                console.log("添加失败");
-            }
-
-        } else {
-            console.log(66)
-            let { goodData } = this.props;
-            let str = {
-                uid: this.state.uid,
-                gid: goodData.gid,
-                src: goodData.src,
-                title: goodData.title,
-                price: goodData.price,
-                num: this.state.num,
-                choose: true
-            }
-            let data = await cart.post("/insert", Qs.stringify(str));
-            if (data.code) {
-                console.log("添加成功");
-                this.props.choice(false);
-            } else {
-                console.log("添加失败")
-                this.props.choice(false);
-            }
-
-
-        }
+    //加入购物车
+    gocart = (gid) => {
+        this.goubuynow(gid)
+    }
+    //立即购买
+    buyNow = (gid) => {
+        this.goubuynow(gid)
         let path = '/cart';
         this.props.history.push(path);
     }
 
     render() {
         let { goodData } = this.props;
-        let { num, success, fail } = this.state;
+        let { num } = this.state;
         let totalprice = goodData.price * num;
-        // console.log(this.props)
-        console.log(this.props)
         return <div className="selecom">
             {/* 遮罩层 */}
             <div className="divBG"
                 onClick={this.close.bind(this)}
             ></div>
-            <div className="tishi">{
-                success ? <Alert message="添加成功" type="success" showIcon closable="true" /> : ''
-            }
-            </div>
-            <div className="tishifail">
-                {
-                    fail ? <Alert message="添加失败" type="warning" showIcon /> : ''
-                }
-            </div>
-
             {/* 关闭 */}
             <div className="close"
                 onClick={this.close.bind(this)}
@@ -283,4 +206,4 @@ const mapDispatchToProps = dispatch => ({
     dispatch
 })
 Select = connect(mapStateToProps, mapDispatchToProps)(Select);//
-export default withRouter(Select)
+export default withRouter(Select);

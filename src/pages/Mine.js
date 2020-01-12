@@ -2,9 +2,37 @@ import React, { Component } from 'react';
 import { Icon } from 'antd';
 import '../common/css/mine.css';
 import 'antd/dist/antd.css';
-
+import { my } from '../api';
 class Mine extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            datalist: {}
+        }
+        this.goInfor = this.goInfor.bind(this);
+        this.goLogin = this.goLogin.bind(this)
+    }
+    goInfor() {
+        this.props.history.push('/informat');
+    }
+    async componentDidMount() {
+        let phone = sessionStorage.getItem('phone');
+        if (phone) {
+            let { data } = await my.get('/LoginPhone', { phone: phone })
+            this.setState({
+                datalist: data.data[0]
+            })
+        }
+
+    }
+    goLogin() {
+        // e.stopPropagation();
+        this.props.history.push('./login')
+    }
+
     render() {
+        let phone = sessionStorage.getItem('phone');
+        let { datalist } = this.state;
         return <div>
             <section className="main">
                 <div className="userinformation">
@@ -14,13 +42,16 @@ class Mine extends Component {
                         </div>
                         <div className="arrow">
                             <div className="arrow-right-icon box-userinfo"> </div>
-                            <div className="avatar">
+                            <div className="avatar" onClick={this.goInfor.bind(this)}>
                                 <img src="https://img02.hua.com/m/images/wxguanjia-kf.png" alt="" />
-                                <p className="ru">未登入</p>
-                                <div className="pan" style={{ display: 'none' }}>
-                                    <p className="na">18978155857</p>
-                                    <p style={{ color: '#a9a9a9' }}>手机号：18978155857</p>
-                                </div>
+
+                                {
+                                    phone ? <div className="pan fr" >
+                                        <p className="na">{datalist.username}</p>
+                                        <p style={{ color: '#a9a9a9' }}>手机号：{datalist.phone}</p>
+                                    </div> : <p className="ru" onClick={this.goLogin.bind(this)}>未登入</p>
+                                }
+
                             </div>
                         </div>
                         <div className="linkbox">

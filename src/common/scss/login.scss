@@ -1,0 +1,35 @@
+.Login {
+    h1 {
+        height: 1.388889rem;
+        text-align: center;
+        line-height: 1.388889rem;
+        font-size: .462963rem;
+    }
+
+    .loginImg {
+        img {
+            width: 100%;
+        }
+    }
+
+    .inputLogin {
+        padding: .277778rem;
+
+        input {
+            margin-bottom: .277778rem;
+        }
+    }
+}
+
+
+.login-form-forgot {
+    float: right;
+}
+
+.login-form-button {
+    width: 100%;
+}
+
+.LoginBut {
+    padding: .277778rem;
+}

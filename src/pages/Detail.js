@@ -1,14 +1,11 @@
 
 import React, { Component } from 'react';
-import { Icon, Alert } from 'antd';
+import { Icon } from 'antd';
 import '../common/scss/detail.scss'
 import { good } from '../api';
 import Select from '../components/select ';
-// import { compose } from 'redux';
 import { connect } from 'react-redux';
-// import store from './store';
-
-// import { addgood } from './store/actions/cart';
+import { withRouter } from 'react-router-dom';
 class Detail extends Component {
     constructor(props) {
         super(props);
@@ -21,9 +18,6 @@ class Detail extends Component {
 
         }
         this.choice = this.choice.bind(this);
-        // this.tishisucc = this.tishisucc.bind(this);
-        // this.tishifail = this.tishifail.bind(this);
-
     }
     //获取数据渲染
     async componentDidMount() {
@@ -51,43 +45,13 @@ class Detail extends Component {
             dis: strnew
         })
     }
-    // tishisucc(str) {
-    //     let strnew = null;
-    //     if (this.state.success === str) {
-    //         strnew = true;
-    //     } else {
-    //         strnew = false;
-    //     }
-    //     this.setState({
-    //         dis: strnew
-    //     })
-    // }
-    // tishifail(str) {
-    //     let strnew = null;
-    //     if (this.state.fail === str) {
-    //         strnew = true;
-    //     } else {
-    //         strnew = false;
-    //     }
-    //     this.setState({
-    //         dis: strnew
-    //     })
-    // }
+
 
 
     render() {
-        let { goodData, dis, success, fail } = this.state;
+        let { goodData, dis } = this.state;
         let { cartlist } = this.props;
         return <div className="detail">
-            <div className="tishi">{
-                success ? <Alert message="添加成功" type="success" showIcon /> : ''
-            }
-            </div>
-            <div className="tishifail">
-                {
-                    fail ? <Alert message="添加失败" type="warning" showIcon /> : ''
-                }
-            </div>
             <header className="header">
                 <span className="fl iconlet"
                     onClick={() => {
@@ -111,8 +75,19 @@ class Detail extends Component {
                 </div>
 
             </div>
+            <div className="deimg">
+                <img src="https://res.bestcake.com/images-2/classical-detail-new/detail-img/沃尔夫斯堡之春1.jpg?v=8" alt="" />
+                <img src="https://res.bestcake.com/images-2/classical-detail-new/detail-img/沃尔夫斯堡之春2.jpg?v=8 " alt="" />
+                <img src="https://res.bestcake.com/images-2/classical-detail-new/detail-img/沃尔夫斯堡之春3.jpg?v=8" alt="" />
+                <img src="https://res.bestcake.com/images-2/classical-detail-new/detail-img/芒GO1.jpg?v=12" alt="" />
+                <img src="https://res.bestcake.com/images-2/classical-detail-new/detail-img/芒GO2.jpg?v=12" alt="" />
+                <img src="https://res.bestcake.com/images-2/classical-detail-new/detail-img/芒GO3.jpg?v=12" alt="" />
+
+            </div>
             <div className="defooter clearfix">
-                <div className="decart fl">
+                <div className="decart fl" onClick={() => {
+                    this.props.history.push('/cart');
+                }}>
                     <Icon type="shopping-cart" />
                 </div>
                 <div className="fr gobuy" onClick={this.choice.bind(this, dis)}>立即购买</div>
@@ -130,7 +105,7 @@ class Detail extends Component {
 
             </div>
             {
-                cartlist.length ? <div className="yuans">
+                cartlist.length ? <div className="yuanss">
                     {
                         cartlist.length
                     }
@@ -151,4 +126,4 @@ const mapDispatchToProps = dispatch => ({
     dispatch
 })
 Detail = connect(mapStateToProps, mapDispatchToProps)(Detail);//
-export default Detail;
+export default withRouter(Detail);

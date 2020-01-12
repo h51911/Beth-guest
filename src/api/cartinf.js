@@ -14,7 +14,6 @@ const CartGoods = axios.create({
 
 export const post = async (path, str = {}, config = {}) => {
     let { data } = await Good.post(path, str, config)
-
     return data;
 }
 

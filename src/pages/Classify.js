@@ -47,6 +47,7 @@ class classify extends Component {
         this.goto = this.goto.bind(this);
         this.open = this.open.bind(this);
         this.choice = this.choice.bind(this);
+        this.gotoRag = this.gotoRag.bind(this);
 
     }
 
@@ -86,6 +87,10 @@ class classify extends Component {
         this.props.history.push(adr + gid)
 
     }
+    gotoRag() {
+        this.props.history.push('/rag')
+
+    }
     // 点击出现数量的加减
     choice(str) {
         let strnew = null;
@@ -98,9 +103,7 @@ class classify extends Component {
             isok: strnew
         })
     }
-    // componentDidUpdate() {
-    //     console.log(666)
-    // }
+
 
     async open(str, gid, ev) {
         ev.stopPropagation();
@@ -120,18 +123,13 @@ class classify extends Component {
             isok: strnew,
             list: data[0]
         })
-        // console.log(this.state.list)
-
-        // e.nativeEvent.stopImmediatePropagation()
-        // // 阻止合成事件间的冒泡，不会往最外层的div的test方法冒了，如果不加这句代码，就会冒泡至外层div，执行test方法。      
-        // e.stopPropagation()
     }
     render() {
         let { menu, datalist, isok, list } = this.state;
         // console.log(list)
         return <div className="classify">
             <div className="deheader">
-                <h2 className="title">分类</h2>
+                <h2 className="title" onClick={this.gotoRag.bind(this)}>分类</h2>
                 {/* 导航分类 */}
                 <ul className="sort_list clearfix">
                     {
@@ -180,10 +178,7 @@ class classify extends Component {
                         choice={this.choice.bind(this)}
                     ></Selegood> : ''
                 }
-                {/* <Selegood
-                    goodData={list}
-                    choice={this.choice.bind(this)}
-                ></Selegood> */}
+
             </div>
         </div >
     }
