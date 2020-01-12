@@ -18,7 +18,8 @@ class Login extends Component {
         this.Phoncheck = this.Phoncheck.bind(this);
         this.check = this.check.bind(this);
         this.Login = this.Login.bind(this);
-        this.gotoforpass = this.gotoforpass.bind(this)
+        this.gotoforpass = this.gotoforpass.bind(this);
+        this.gotorag = this.gotorag.bind(this)
     }
 
     componentDidMount() {
@@ -28,6 +29,9 @@ class Login extends Component {
                 phone: number
             })
         }
+    }
+    gotorag() {
+        this.props.history.push('/rag');
     }
     Pass(e) {
         this.setState({
@@ -115,7 +119,9 @@ class Login extends Component {
                      </Button>
 
                 </Form.Item>
-
+                <span className="login-form-forgot" onClick={this.gotorag.bind(this)}>
+                    点击注册
+                    </span>
             </div>
 
         </div >

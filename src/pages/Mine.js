@@ -13,7 +13,13 @@ class Mine extends Component {
         this.goLogin = this.goLogin.bind(this)
     }
     goInfor() {
-        this.props.history.push('/informat');
+        let phone = sessionStorage.getItem('phone');
+        if (phone) {
+            this.props.history.push('/informat');
+        } else {
+            this.props.history.push('/login');
+        }
+
     }
     async componentDidMount() {
         let phone = sessionStorage.getItem('phone');
@@ -26,7 +32,6 @@ class Mine extends Component {
 
     }
     goLogin() {
-        // e.stopPropagation();
         this.props.history.push('./login')
     }
 
